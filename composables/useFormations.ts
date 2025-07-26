@@ -6,6 +6,7 @@ export const useFormations = () => {
   const { data, pending, error, refresh } = useFetch<ApiResponse<Formation[]>>('/api/formations', {
     server: true,
     lazy: false,
+    key: 'formations',
     default: () => ({ data: [] }),
   });
 

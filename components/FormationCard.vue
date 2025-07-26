@@ -1,5 +1,10 @@
 <template>
-  <li class="p-6 hover:bg-gray-50 transition-colors cursor-pointer" @click="handleClick">
+  <li
+    class="p-6 hover:bg-gray-50 transition-colors cursor-pointer"
+    role="button"
+    tabindex="0"
+    @click="handleClick"
+  >
     <div class="flex items-center justify-between">
       <div class="flex-1">
         <h3 class="text-lg font-semibold text-gray-900">{{ formation.school }}</h3>
@@ -39,7 +44,6 @@ interface Props {
 
 interface Emits {
   click: [id: string];
-  delete: [id: string];
 }
 
 const props = defineProps<Props>();

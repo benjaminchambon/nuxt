@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-const { formations, pending, error, fetchFormations } = useFormations();
+const { formations, pending, error } = useFormations();
 
 definePageMeta({
   middleware: 'auth',
@@ -53,9 +53,4 @@ definePageMeta({
 const handleFormationClick = (formationId: string) => {
   navigateTo(`/formations/${formationId}`);
 };
-
-// Load data on component mount
-onMounted(() => {
-  fetchFormations();
-});
 </script>
