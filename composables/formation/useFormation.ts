@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useFetch } from 'nuxt/app';
-import type { Formation } from '../types/formation';
+import type { Formation } from '~/types/formation';
 
 export const useFormation = (id: string) => {
   const { data, pending, error, refresh } = useFetch<Formation>(`/api/formations/${id}`, {

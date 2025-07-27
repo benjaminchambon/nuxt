@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Formation } from '../types/formation';
+import type { Formation } from '~/types/formation';
 
 interface Props {
   formations: Formation[];

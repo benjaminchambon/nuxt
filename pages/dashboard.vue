@@ -26,25 +26,77 @@
         </div>
       </div>
 
-      <!-- Formations List -->
-      <FormationList
-        v-else-if="formations.length > 0"
-        :formations="formations"
-        @click="handleFormationClick"
-      />
+      <!-- Content when data is loaded -->
+      <template v-else>
+        <!-- Filter Bar -->
+        <FilterBar
+          :filters="filters"
+          :available-cities="availableCities"
+          :filter-stats="filterStats"
+          @set-city="setCity"
+          @set-search="setSearch"
+          @clear-filters="clearFilters"
+          @clear-city="clearCity"
+        />
 
-      <!-- Empty State -->
-      <EmptyState
-        v-else
-        title="No formations"
-        description="Get started by adding your first formation."
-      />
+        <!-- Results Summary -->
+        <div v-if="formations.length > 0" class="mb-4">
+          <p class="text-sm text-gray-600">
+            <template v-if="filterStats.hasActiveFilters">
+              Showing {{ filterStats.filtered }} of {{ filterStats.total }} formations
+            </template>
+            <template v-else> {{ filterStats.total }} formations total </template>
+          </p>
+        </div>
+
+        <!-- Formations List -->
+        <FormationList
+          v-if="filteredFormations.length > 0"
+          :formations="filteredFormations"
+          @click="handleFormationClick"
+        />
+
+        <!-- Empty State - No formations at all -->
+        <EmptyState
+          v-else-if="formations.length === 0"
+          title="No formations"
+          description="Get started by adding your first formation."
+        />
+
+        <!-- Empty State - No results after filtering -->
+        <EmptyState
+          v-else
+          title="No formations found"
+          description="Try adjusting your search criteria or clear the current filters."
+        >
+          <template #actions>
+            <button
+              @click="clearFilters"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Clear Filters
+            </button>
+          </template>
+        </EmptyState>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const { formations, pending, error } = useFormations();
+
+// Initialize filters
+const {
+  filters,
+  availableCities,
+  filteredFormations,
+  filterStats,
+  setCity,
+  setSearch,
+  clearFilters,
+  clearCity,
+} = useFormationFilters(formations);
 
 definePageMeta({
   middleware: 'auth',
@@ -53,4 +105,24 @@ definePageMeta({
 const handleFormationClick = (formationId: string) => {
   navigateTo(`/formations/${formationId}`);
 };
+
+// SEO Meta tags based on active filters
+useHead(() => {
+  const title = filters.value.city
+    ? `Formations in ${filters.value.city} - My Study List`
+    : 'My Study List - Educational Formations';
+
+  const description = filters.value.city
+    ? `Browse educational formations available in ${filters.value.city}. Find the perfect school for your studies.`
+    : 'Browse and manage your educational formations. Find the perfect school for your studies.';
+
+  return {
+    title,
+    meta: [
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+    ],
+  };
+});
 </script>

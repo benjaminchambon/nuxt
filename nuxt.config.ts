@@ -11,4 +11,17 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  imports: {
+    dirs: ['composables/**'],
+  },
+  components: [
+    {
+      path: '~/components/Dashboard',
+      pathPrefix: false,
+    },
+    {
+      path: '~/components/DesignSystem',
+      pathPrefix: false,
+    },
+  ],
 });
